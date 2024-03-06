@@ -1,17 +1,17 @@
 use std::process::exit;
-
 use image::{DynamicImage, GenericImage};
-
-use crate::{utils::random, Data};
+use crate::utils::random;
+use crate::data::Data;
 
 /// Fetches a sprite and returns a vector of bytes.
 /// This will also format the names properly.
 pub fn get_sprite(
     pokemon: &mut String,
-    form: &str,
+    list: &[&str],
     shiny: bool,
     female: bool,
-    list: &[&str],
+    form: &str,
+    gen7: Option<bool>
 ) -> Vec<u8> {
     if let Ok(pokedex_id) = pokemon.parse::<usize>() {
         if pokedex_id == 0 {
@@ -41,16 +41,23 @@ pub fn get_sprite(
         .replace(['.', '\'', ':'], "")
         .to_lowercase();
 
+    let gen_prefix = match gen7 {
+        Some(true) => "pokemon-gen7x/",
+        Some(false) => "pokemon-gen8/",
+        None => ""
+    };
+
     let path = &format!(
-        "{}/{}{}.png",
+        "{}{}/{}{}.png",
+        gen_prefix,
         if shiny { "shiny" } else { "regular" },
         if female && !is_random { "female/" } else { "" }, // Random pokemon also shouldn't follow the female rule.
         filename.trim()
     );
-
+    
     Data::get(path)
         .unwrap_or_else(|| {
-            eprintln!("pokemon not found");
+            eprintln!("Pokémon '{}' not found", pokemon);
             exit(1);
         })
         .data
@@ -82,17 +89,18 @@ pub fn combine_sprites(
 /// Mutable access to `pokemons` is required to edit the names of random pokemon so they can be displayed.
 pub fn get_sprites(
     pokemons: &mut [String],
+    list: &[&str],
     shiny: bool,
     female: bool,
     form: &str,
-    list: &[&str],
+    gen7: Option<bool>
 ) -> (u32, u32, Vec<DynamicImage>) {
     let mut sprites = Vec::new();
     let mut combined_width: u32 = 0;
     let mut combined_height: u32 = 0;
 
     for pokemon in pokemons.iter_mut() {
-        let bytes = get_sprite(pokemon, form, shiny, female, list);
+        let bytes = get_sprite(pokemon, list, shiny, female, form, gen7);
 
         let img = image::load_from_memory(&bytes).unwrap();
         let trimmed = showie::trim(&img);

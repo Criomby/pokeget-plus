@@ -1,104 +1,86 @@
-# pokeget-rs
+# pokeget+
 
-A better rust version of pokeget.
+An advanced version of the original [pokeget-rs](https://github.com/talwat/pokeget-rs).
+
+Additional features over the original:
+- Option to use the smaller/retro gen7 sprites with `--gen7`
+- \+ various fixes and changes (see [changelog](CHANGELOG.md))
+- Coming soon:
+    - Pokémon items with `--item [NAME]`
+    - List available Pokémon & items with `--list`, `-l`
+
+<br>
+
+## Installation
+
+You have two options:
+
+### 1. Download the latest binary from [releases](https://github.com/Criomby/pokeget-rs/releases)
+
+- The **min** version contains *only the gen8 sprites* for reduced file size (~8.6 MB)
+- The **plus** version contains the full feature set including the *gen7 sprites* and *items* (~X MB)
+
+### 2. Build from source
+
+Install via cargo:
+
+```sh
+cargo install --git https://github.com/Criomby/pokeget-rs --locked --all-features
+```
+and making sure `$HOME/.cargo/bin` is added to `$PATH`.
+
+*or* 
+
+clone the repository and compile manually:
+
+```sh
+git clone --recurse-submodules https://github.com/Criomby/pokeget-rs
+cd pokeget-rs
+cargo build --release --locked --all-features
+```
+
+If you wish to only have the gen8 sprites to get a smaller binary<br>
+and you don't need gen7 sprites or items just remove the `--all-features` flag.
+
+**Update** with either re-running `cargo install --git https://github.com/Criomby/pokeget-rs` or<br>
+`git pull` on the repository and then recompile.
+
+<br>
 
 ## Usage
 
-`pokeget <pokemon>`
+`pokeget [POKEMON]` e.g. `pokeget pikachu`
 
-for more info, run `pokeget --help`
+for more info and to see all options, run `pokeget --help`
 
-Also, if you're using pokeget in your bashrc, then instead of running `pokeget <pokemon>`,
-you can just write the output to a file by doing: `pokeget <pokemon> > file.txt` and then
-have something like `cat file.txt` bashrc.
+### Advanced Usage
+
+TODO
+
+<br>
 
 You can also use multiple pokemon like:
 
 `pokeget bulbasaur pikachu`
 
-and dex id's work too:
+and Pokédex ID's work too:
 
 `pokeget 1 2 3`
 
-## Installation
-
-If you're on arch, you can use the AUR:
-
-```sh
-yay -S pokeget
-```
-
-You can either use cargo by doing:
-
-```sh
-cargo install pokeget
-```
-
-and making sure `$HOME/.cargo/bin` is added to `$PATH`.
-
-or clone the repository and compiling manually by doing:
-
-```sh
-git clone --recurse-submodules https://github.com/talwat/pokeget-rs.git
-cd pokeget-rs
-cargo build --release
-mv target/release/pokeget ~/.local/bin
-```
-
-and making sure `$HOME/.local/bin` is added to `$PATH`.
-
-## Updating
-
-Just rerun `cargo install pokeget` or `git pull` on the repository and then recompile.
-
-### Adding a directory to $PATH
-
-#### Bash & Zsh
-
-Append this to your `.bashrc` or `.zshrc`:
-
-```sh
-export PATH="<path>:$PATH"
-```
-
-#### Fish
-
-Run this in your CLI:
-
-```sh
-fish_add_path <path>
-```
+<br>
 
 ## Why?
 
-Because the first pokeget was slow, bloated, and super complicated I decided to make a better version in rust.
+I saw the demand for additional features and since the original author did not want to include the proposed features, I decided to fork and code them myself.
+Still, the original author did some great work creating the foundation of this project.
 
-Now, instead of precomputing all the sprites and uploading them to a repo, pokeget will
-be able to compute them on the fly which makes everything much more flexible while still retaining performance.
+If at any time the original author decides to want to include any added features in the original project, just open an issue and I'll be happy to draft a PR.
 
-It will also draw the sprites 2x smaller by using half squares.
-
-## What about other projects?
-
-pokeget-rs has an edge over projects like the old pokeget, pokeshell, etc... since it's in rust.
-
-It also is significantly (5.5x) faster than krabby which is another very similar project.
-
-For more info, go to [OTHER_PROJECTS.md](OTHER_PROJECTS.md).
-
-## Where are the prebuilt binaries?
-
-I cannot figure out how to compile rust to multiple different platforms with a CI pipeline like github actions.
-If someone knows how, PLEASE make a PR.
-
-## What about big sprites?
-
-Gone. Reduced to atoms.
-
-In all seriousness, i've just decided to not deal with them since it's extra work that I don't want to deal with.
+<br>
 
 ## Credits
 
-This time, the sprites are from [pokesprite](https://github.com/msikma/pokesprite) and pokeget uses them with a submodule.
+The sprites are from [pokesprite](https://github.com/msikma/pokesprite).
+They are embedded into the binary, so no additional files will have to be downloaded and `pokeget` runs fully offline.
 
-Sprites are embedded into the binary, so pokeget won't download them.
+Also see the [other projects](OTHER_PROJECTS.md).

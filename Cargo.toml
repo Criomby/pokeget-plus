@@ -1,16 +1,18 @@
 [package]
 name = "pokeget"
 authors = [ "talwat" ]
-version = "1.4.2"
+version = "1.5.0"
 edition = "2021"
-description = "Display pokemon sprites in your terminal."
+description = "Display Pokémon sprites in your terminal."
 license = "MIT"
 readme = "README.md"
 documentation = "https://github.com/talwat/pokeget-rs"
 homepage = "https://github.com/talwat/pokeget-rs"
 repository = "https://github.com/talwat/pokeget-rs"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+# gen8 sprites are always included
+gen7 = [] # include gen7 sprites & flag
 
 [dependencies]
 Inflector = { version = "0.11.4", default-features = false }
@@ -20,5 +22,5 @@ image = { version = "0.24.6", default-features = false, features = [
     "rgb",
 ] }
 rand = "0.8.5"
-rust-embed = { version = "6.8.1" }
+rust-embed = { version = "8.3.0", features = ["include-exclude"] }
 showie = "1.0.0"

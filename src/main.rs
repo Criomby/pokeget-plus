@@ -7,7 +7,6 @@ use inflector::Inflector;
 use pokeget::cli::Args;
 use pokeget::sprites::{combine_sprites, get_sprites};
 use pokeget::utils::get_form;
-use pokeget::Data;
 use std::process::exit;
 
 fn format_name(name: &String) -> String {
@@ -20,7 +19,7 @@ fn main() {
     let args = Args::parse();
 
     if args.pokemon.is_empty() {
-        eprintln!("you must specify the pokemon you want to display");
+        eprintln!("Please specify the Pokémon to display");
         exit(1);
     }
 
@@ -29,7 +28,18 @@ fn main() {
     let mut pokemons = args.pokemon;
 
     let (width, height, sprites) =
-        get_sprites(&mut pokemons, args.shiny, args.female, &form, &pokemon_list);
+        get_sprites(
+            &mut pokemons,
+            &pokemon_list,
+            args.shiny,
+            args.female,
+            &form,
+            #[cfg(not(feature = "gen7"))]
+            None,
+            #[cfg(feature = "gen7")]
+            Some(args.gen7),
+        );
+    
     let combined = combine_sprites(width, height, &sprites);
 
     if !args.hide_name {
