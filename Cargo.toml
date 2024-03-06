@@ -1,0 +1,24 @@
+[package]
+name = "pokeget"
+authors = [ "talwat" ]
+version = "1.4.2"
+edition = "2021"
+description = "Display pokemon sprites in your terminal."
+license = "MIT"
+readme = "README.md"
+documentation = "https://github.com/talwat/pokeget-rs"
+homepage = "https://github.com/talwat/pokeget-rs"
+repository = "https://github.com/talwat/pokeget-rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+Inflector = { version = "0.11.4", default-features = false }
+clap = { version = "4.3.19", features = ["derive"] }
+image = { version = "0.24.6", default-features = false, features = [
+    "png",
+    "rgb",
+] }
+rand = "0.8.5"
+rust-embed = { version = "6.8.1" }
+showie = "1.0.0"
