@@ -639,7 +639,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "pokeget"
+name = "pokeget-plus"
 version = "1.5.0"
 dependencies = [
  "Inflector",

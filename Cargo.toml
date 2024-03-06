@@ -1,17 +1,17 @@
 [package]
-name = "pokeget"
-authors = [ "talwat" ]
+name = "pokeget-plus"
+authors = [ "talwat", "Criomby" ]
 version = "1.5.0"
 edition = "2021"
-description = "Display Pokémon sprites in your terminal."
+description = "Display Pokémon, Pokéballs & items in your terminal."
 license = "MIT"
 readme = "README.md"
-documentation = "https://github.com/talwat/pokeget-rs"
-homepage = "https://github.com/talwat/pokeget-rs"
-repository = "https://github.com/talwat/pokeget-rs"
+documentation = "https://github.com/Criomby/pokeget-plus"
+homepage = "https://github.com/Criomby/pokeget-plus"
+repository = "https://github.com/Criomby/pokeget-plus"
 
 [features]
-# gen8 sprites are always included
+# gen8 sprites are always included by default
 gen7 = [] # include gen7 sprites & flag
 
 [dependencies]
