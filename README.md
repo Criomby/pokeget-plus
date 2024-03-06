@@ -1,4 +1,4 @@
-# pokeget+
+# pokeget-plus
 
 An advanced version of the original [pokeget-rs](https://github.com/talwat/pokeget-rs).
 
