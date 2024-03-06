@@ -5,7 +5,8 @@ An advanced version of the original [pokeget-rs](https://github.com/talwat/pokeg
 Additional features over the original:
 - Option to use the smaller/retro gen7 sprites with `--gen7`
 - \+ various fixes and changes (see [changelog](CHANGELOG.md))
-- Coming soon:
+
+    *Coming soon*:
     - Pokémon items with `--item [NAME]`
     - List available Pokémon & items with `--list`, `-l`
 
