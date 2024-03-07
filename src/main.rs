@@ -4,33 +4,42 @@
 
 use clap::Parser;
 use inflector::Inflector;
-use pokeget::cli::Args;
-use pokeget::sprites::{combine_sprites, get_sprites};
-use pokeget::utils::get_form;
+use pokeget_plus::cli::Args;
+use pokeget_plus::sprites::{combine_sprites, get_sprites};
+use pokeget_plus::utils::get_form;
 use std::process::exit;
+use std::collections::HashMap;
+use serde_json;
 
 fn format_name(name: &String) -> String {
-    name.to_title_case().replace('-', " ")
+    if name.contains('/') {
+        // format item names
+        let (cat, var) = name.split_once('/').unwrap();
+        format!("{} {}", var, cat).to_title_case()
+    } else {
+        name.to_title_case().replace('-', " ")
+    }
 }
 
 fn main() {
-    let pokemon_list: Box<[&'static str]> = include_str!("../data/pokemon.txt").split('\n').collect();
+    let pokedex_list: Box<[&'static str]> = include_str!("../data/pokedex-list.txt").split('\n').collect();
+    let items_list: Box<[&'static str]> = include_str!("../data/items-list.txt").split('\n').collect();
+    let items_index: HashMap<String, String> = serde_json::from_str(include_str!("../data/items.json")).expect("Invalid items.json");
 
     let args = Args::parse();
 
-    if args.pokemon.is_empty() {
-        eprintln!("Please specify the Pokémon to display");
+    if args.names.is_empty() {
+        eprintln!("Please specify the Pokémon or item to display");
         exit(1);
     }
 
     let form = get_form(&args);
 
-    let mut pokemons = args.pokemon;
+    let mut names = args.names;
 
     let (width, height, sprites) =
         get_sprites(
-            &mut pokemons,
-            &pokemon_list,
+            &mut names,
             args.shiny,
             args.female,
             &form,
@@ -38,6 +47,13 @@ fn main() {
             None,
             #[cfg(feature = "gen7")]
             Some(args.gen7),
+            #[cfg(not(feature = "items"))]
+            None,
+            #[cfg(feature = "items")]
+            Some(args.item),
+            &pokedex_list,
+            &items_list,
+            &items_index
         );
     
     let combined = combine_sprites(width, height, &sprites);
@@ -45,10 +61,10 @@ fn main() {
     if !args.hide_name {
         eprintln!(
             "{}\n",
-            pokemons
+            names
                 .iter()
                 .enumerate()
-                .map(|(i, x)| format_name(x) + if i != pokemons.len() - 1 { ", " } else { "" })
+                .map(|(i, x)| format_name(x) + if i != names.len() - 1 { ", " } else { "" })
                 .collect::<String>()
         );
     }

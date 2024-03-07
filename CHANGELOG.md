@@ -1,11 +1,29 @@
+## 1.6.0
+
+### What's new:
+
+**Features:**
+
+- Get Pokémon items with `--item [NAME]`
+    - can be conditionally compiled with `--features items`
+    - increases binary size by ~600 KB
+    - see documentation for more usage info and availabe items
+
+**Misc:**
+
+- prebuilt binaries will include all features from now on
+- documentation
+- some refactoring
+
+<br>
+
 ## 1.5.0
 
 ### What's new:
 
 **Features:**
 
-- optional feature to include **gen7 sprites**
-    - feature not included in the prebuild binaries
+- optional feature to include **retro gen7 sprites**
     - to compile with feature enabled:<br>
     `cargo build --release --locked --features gen7`
     - then to use gen7 instead of gen8 sprites use e.g. `pokeget random --gen7`
