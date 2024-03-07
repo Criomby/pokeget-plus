@@ -3,10 +3,20 @@ use clap::Parser;
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 pub struct Args {
-    /// Pokémon name or Pokédex ID (or "random" | 0)
-    pub pokemon: Vec<String>,
+    /// name(s) or "random"
+    pub names: Vec<String>,
 
-    /// Hide the Pokémon's name
+    #[cfg(feature = "items")]
+    /// Get item (e.g. 'ball/master')
+    #[arg(long, default_value_t = false)]
+    pub item: bool,
+
+    #[cfg(feature = "gen7")]
+    /// Display gen7 sprite (instead of gen8)
+    #[arg(long, default_value_t = false)]
+    pub gen7: bool,
+
+    /// Hide the Pokémon / item name
     #[arg(long, default_value_t = false)]
     pub hide_name: bool,
 
@@ -53,9 +63,4 @@ pub struct Args {
     /// Display the female variant of the Pokémon if it exists. Doesn't apply to Nidoran for some reason.
     #[arg(long, default_value_t = false)]
     pub female: bool,
-
-    #[cfg(feature = "gen7")]
-    /// Display older gen7 sprite if available
-    #[arg(long, default_value_t = false)]
-    pub gen7: bool,
 }

@@ -1,26 +1,29 @@
 [package]
-name = "pokeget"
-authors = [ "talwat" ]
-version = "1.5.0"
+name = "pokeget-plus"
+authors = [ "talwat", "Criomby" ]
+version = "1.6.0"
 edition = "2021"
-description = "Display Pokémon sprites in your terminal."
+description = "Display Pokémon, Pokéballs, berries, potions & more items in your terminal."
 license = "MIT"
 readme = "README.md"
-documentation = "https://github.com/talwat/pokeget-rs"
-homepage = "https://github.com/talwat/pokeget-rs"
-repository = "https://github.com/talwat/pokeget-rs"
+documentation = "https://github.com/Criomby/pokeget-plus"
+homepage = "https://github.com/Criomby/pokeget-plus"
+repository = "https://github.com/Criomby/pokeget-plus"
+
+[[bin]]
+name = "pokeget"
+path = "src/main.rs"
 
 [features]
-# gen8 sprites are always included
-gen7 = [] # include gen7 sprites & flag
+# gen8 sprites are always included by default
+gen7 = [] # include gen7 sprites (--gen7)
+items = [] # include items like Pokéballs, berries, etc. (--item)
 
 [dependencies]
 Inflector = { version = "0.11.4", default-features = false }
 clap = { version = "4.3.19", features = ["derive"] }
-image = { version = "0.24.6", default-features = false, features = [
-    "png",
-    "rgb",
-] }
+image = { version = "0.24.6", default-features = false, features = ["png","rgb",] }
 rand = "0.8.5"
 rust-embed = { version = "8.3.0", features = ["include-exclude"] }
 showie = "1.0.0"
+serde_json = { version = "1.0" }

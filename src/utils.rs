@@ -5,7 +5,6 @@ use crate::cli::Args;
 /// Returns a random pokemon.
 pub fn random(list: &[&str]) -> String {
     let mut rand = rand::thread_rng();
-
     String::from(list[rand.gen_range(0..list.len())])
 }
 

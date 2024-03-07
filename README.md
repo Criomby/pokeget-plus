@@ -2,13 +2,11 @@
 
 An advanced version of the original [pokeget-rs](https://github.com/talwat/pokeget-rs).
 
-Additional features over the original:
-- Option to use the smaller/retro gen7 sprites with `--gen7`
+Additional features:
+- Get **Pokémon items** with `--item [NAME]`
+- Option to use the **retro gen7 sprites** with `--gen7`
+- Prebuilt binaries for the most common targets
 - \+ various fixes and changes (see [changelog](CHANGELOG.md))
-
-    *Coming soon*:
-    - Pokémon items with `--item [NAME]`
-    - List available Pokémon & items with `--list`, `-l`
 
 <br>
 
@@ -16,17 +14,14 @@ Additional features over the original:
 
 You have two options:
 
-### 1. Download the latest binary from [releases](https://github.com/Criomby/pokeget-rs/releases)
-
-- The **min** version contains *only the gen8 sprites* for reduced file size (~8.6 MB)
-- The **plus** version contains the full feature set including the *gen7 sprites* and *items* (~X MB)
+### 1. Download the latest binary from [releases](https://github.com/Criomby/pokeget-plus/releases)
 
 ### 2. Build from source
 
 Install via cargo:
 
 ```sh
-cargo install --git https://github.com/Criomby/pokeget-rs --locked --all-features
+cargo install --git https://github.com/Criomby/pokeget-plus --locked --all-features
 ```
 and making sure `$HOME/.cargo/bin` is added to `$PATH`.
 
@@ -35,45 +30,67 @@ and making sure `$HOME/.cargo/bin` is added to `$PATH`.
 clone the repository and compile manually:
 
 ```sh
-git clone --recurse-submodules https://github.com/Criomby/pokeget-rs
+git clone --recurse-submodules https://github.com/Criomby/pokeget-plus
 cd pokeget-rs
 cargo build --release --locked --all-features
 ```
 
-If you wish to only have the gen8 sprites to get a smaller binary<br>
-and you don't need gen7 sprites or items just remove the `--all-features` flag.
-
-**Update** with either re-running `cargo install --git https://github.com/Criomby/pokeget-rs` or<br>
+**Update** with either re-running `cargo install ...` as above or<br>
 `git pull` on the repository and then recompile.
+
+---
+Tip:
+
+> If you don't need the retro gen7 sprites or items, just remove the `--all-features` flag and you'll get a smaller file size since those assets won't be embedded into the binary.<br>
+This will save you 1.6 MB (8.7 MB vs. 10.3 MB).
+
+---
 
 <br>
 
 ## Usage
 
-`pokeget [POKEMON]` e.g. `pokeget pikachu`
+### **Pokémon:**
 
-for more info and to see all options, run `pokeget --help`
+`pokeget [NAME]`
 
-### Advanced Usage
+e.g. `pokeget pikachu`<br>
+Use `pokeget random` for a random Pokémon
 
-TODO
+### **Item:** 
+
+`pokeget --item [category/variation]`
+
+e.g. `pokeget --item ball/super` or `pokeget --item berry/pecha`<br>
+Use `pokeget --item random` for a random item or to get a random item from a sub-category with `pokeget --item ball/random` for a random Pokéball or `berry/random` for a random berry, etc.
+
+List of all available items and categories: [items-list](data/items-list.txt)
 
 <br>
 
-You can also use multiple pokemon like:
+### Advanced Usage
 
-`pokeget bulbasaur pikachu`
+*For more info and to see all options, run* `pokeget --help`
 
-and Pokédex ID's work too:
+You can also use multiple Pokémon / items like:
 
-`pokeget 1 2 3`
+`pokeget bulbasaur pikachu` or `pokeget --item ball/super ball/random`
+
+and Pokédex / item ID's work too, e.g.:
+
+`pokeget 25` (Pikachu)
+
+`pokeget --item 4` (regular Pokéball)
+
+> ID '0' is equal to 'random'.<br>
+So you can also use `pokeget 0` or `pokeget --item 0` to get random results.
 
 <br>
 
 ## Why?
 
-I saw the demand for additional features and since the original author did not want to include the proposed features, I decided to fork and code them myself.
-Still, the original author did some great work creating the foundation of this project.
+I saw the demand for additional features like displaying a random Pokéball or berry in your terminal when you open a new session and since the original author did not want to include the proposed features, I decided to fork and code myself.<br>
+Still, the original author did some great work creating the foundation of this project and I'm grateful for that.
 
 If at any time the original author decides to want to include any added features in the original project, just open an issue and I'll be happy to draft a PR.
 

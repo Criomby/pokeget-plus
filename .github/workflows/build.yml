@@ -1,6 +1,8 @@
 name: Build
 on:
   workflow_dispatch:
+  release:
+    types: [created]
 jobs:
   release:
     name: Release - ${{ matrix.release_for }}
@@ -48,7 +50,7 @@ jobs:
         with:
           command: ${{ matrix.command }}
           target: ${{ matrix.target }}
-          args: "--locked --release"
+          args: "--locked --release --all-features"
       - name: Package as archive
         shell: bash
         run: |
