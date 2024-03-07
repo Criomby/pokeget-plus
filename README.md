@@ -1,6 +1,6 @@
 # pokeget-plus
 
-Display Pokémon, Pokéballs, berries, potions & more items in your terminal.
+Display Pokémon, Pokéballs, berries, potions & more items in your terminal.<br>
 For example you can get a random Pokémon each time you open a new terminal session.
 
 ![Pikachu](https://github.com/msikma/pokesprite/blob/c5aaa610ff2acdf7fd8e2dccd181bca8be9fcb3e/icons/pokemon/regular/pikachu.png)
