@@ -31,13 +31,13 @@ jobs:
             os: macOS-latest
             target: x86_64-apple-darwin
             bin: pokeget
-            name: pokeget-Darwin-x86_64.tar.gz
+            name: pokeget-macOS-x86_64.tar.gz
             command: build
           - release_for: macOS-aarch64
             os: macOS-latest
             target: aarch64-apple-darwin
             bin: pokeget
-            name: pokeget-Darwin-aarch64.tar.gz
+            name: pokeget-macOS-aarch64.tar.gz
             command: build
     runs-on: ${{ matrix.os }}
     steps:

@@ -1,10 +1,26 @@
 # pokeget-plus
 
+Display Pokémon, Pokéballs, berries, potions & more items in your terminal.
+
+![Pikachu](https://github.com/msikma/pokesprite/blob/c5aaa610ff2acdf7fd8e2dccd181bca8be9fcb3e/icons/pokemon/regular/pikachu.png)
+![Sableye](https://github.com/msikma/pokesprite/blob/c5aaa610ff2acdf7fd8e2dccd181bca8be9fcb3e/icons/pokemon/regular/sableye.png)
+![Arcanine](https://github.com/msikma/pokesprite/blob/c5aaa610ff2acdf7fd8e2dccd181bca8be9fcb3e/icons/pokemon/regular/arcanine.png)
+![Metang](https://github.com/msikma/pokesprite/blob/c5aaa610ff2acdf7fd8e2dccd181bca8be9fcb3e/icons/pokemon/regular/metang.png)
+
+![GreatBall](https://github.com/msikma/pokesprite/blob/c5aaa610ff2acdf7fd8e2dccd181bca8be9fcb3e/items/ball/great.png)
+![BlukBerry](https://github.com/msikma/pokesprite/blob/c5aaa610ff2acdf7fd8e2dccd181bca8be9fcb3e/items/berry/bluk.png)
+![Elixir](https://github.com/msikma/pokesprite/blob/c5aaa610ff2acdf7fd8e2dccd181bca8be9fcb3e/items/medicine/elixir.png)
+![Honey](https://github.com/msikma/pokesprite/blob/c5aaa610ff2acdf7fd8e2dccd181bca8be9fcb3e/items/other-item/honey.png)
+
+... and many more!
+
 An advanced version of the original [pokeget-rs](https://github.com/talwat/pokeget-rs).
 
-Additional features:
-- Get **Pokémon items** with `--item [NAME]`
+Key features:
+- Display random Pokémon in your terminal with many options
 - Option to use the **retro gen7 sprites** with `--gen7`
+- Get **Pokémon items** with `--item [NAME]`
+  e.g. get a random Pokéball each time you open a new terminal session
 - Prebuilt binaries for the most common targets
 - \+ various fixes and changes (see [changelog](CHANGELOG.md))
 
