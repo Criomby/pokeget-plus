@@ -1,6 +1,7 @@
 # pokeget-plus
 
 Display Pokémon, Pokéballs, berries, potions & more items in your terminal.
+For example you can get a random Pokémon each time you open a new terminal session.
 
 ![Pikachu](https://github.com/msikma/pokesprite/blob/c5aaa610ff2acdf7fd8e2dccd181bca8be9fcb3e/icons/pokemon/regular/pikachu.png)
 ![Sableye](https://github.com/msikma/pokesprite/blob/c5aaa610ff2acdf7fd8e2dccd181bca8be9fcb3e/icons/pokemon/regular/sableye.png)
@@ -17,12 +18,12 @@ Display Pokémon, Pokéballs, berries, potions & more items in your terminal.
 An advanced version of the original [pokeget-rs](https://github.com/talwat/pokeget-rs).
 
 Key features:
-- Display random Pokémon in your terminal with many options
+- Display Pokémon or items in your terminal with many options
 - Option to use the **retro gen7 sprites** with `--gen7`
 - Get **Pokémon items** with `--item [NAME]`
   e.g. get a random Pokéball each time you open a new terminal session
 - Prebuilt binaries for the most common targets
-- \+ various fixes and changes (see [changelog](CHANGELOG.md))
+- \+ various changes and fixes (see [changelog](CHANGELOG.md))
 
 <br>
 
@@ -47,7 +48,7 @@ clone the repository and compile manually:
 
 ```sh
 git clone --recurse-submodules https://github.com/Criomby/pokeget-plus
-cd pokeget-rs
+cd pokeget-plus
 cargo build --release --locked --all-features
 ```
 
