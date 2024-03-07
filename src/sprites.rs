@@ -12,7 +12,7 @@ pub fn get_sprite(
     female: bool,
     form: &str,
     gen7: Option<bool>,
-    item: Option<bool>,
+    is_item: Option<bool>,
     pokedex_list: &[&str],
     items_list: &[&str],
     items_index: &HashMap<String, String>
@@ -22,7 +22,7 @@ pub fn get_sprite(
         if id == 0 {
             *name = String::from("random");
         } else {
-            if item.is_some_and(|is_item| is_item == true) {
+            if is_item.is_some_and(|is_item| is_item == true) {
                 *name = items_index.get(&id.to_string()).unwrap_or_else(|| {
                     eprintln!("Item with ID '{}' not found", id);
                     exit(1);
@@ -42,7 +42,7 @@ pub fn get_sprite(
     let path: String;
 
     // fn flows for item/pokemon
-    if item.is_some_and(|is_item| is_item == true) {
+    if is_item.is_some_and(|is_item| is_item == true) {
         // name is item
 
         if name == "random" {
@@ -122,7 +122,7 @@ pub fn get_sprite(
     
     Data::get(&path)
         .unwrap_or_else(|| {
-            if item.is_some_and(|is_item| is_item == true) {
+            if is_item.is_some_and(|is_item| is_item == true) {
                 eprintln!("Item '{name}' not found.\nExample: 'ball/master'\nTry 'ball/random' for a random Pokéball");
             } else {
                 eprintln!("Pokémon '{name}' not found");
@@ -162,7 +162,7 @@ pub fn get_sprites(
     female: bool,
     form: &str,
     gen7: Option<bool>,
-    item: Option<bool>,
+    is_item: Option<bool>,
     pokedex_list: &[&str],
     items_list: &[&str],
     items_index: &HashMap<String, String>
@@ -178,7 +178,7 @@ pub fn get_sprites(
             female,
             form,
             gen7,
-            item,
+            is_item,
             pokedex_list,
             items_list,
             items_index,

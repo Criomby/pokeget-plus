@@ -1,7 +1,7 @@
 [package]
 name = "pokeget-plus"
 authors = [ "talwat", "Criomby" ]
-version = "1.6.0"
+version = "1.6.1"
 edition = "2021"
 description = "Display Pokémon, Pokéballs, berries, potions & more items in your terminal."
 license = "MIT"
@@ -15,9 +15,10 @@ name = "pokeget"
 path = "src/main.rs"
 
 [features]
-# gen8 sprites are always included by default
+# gen8 sprites are always included
+default = ["gen7", "items"] # all features enabled by default
 gen7 = [] # include gen7 sprites (--gen7)
-items = [] # include items like Pokéballs, berries, etc. (--item)
+items = [] # include items like Pokéballs, berries, etc. (-i, --item)
 
 [dependencies]
 Inflector = { version = "0.11.4", default-features = false }

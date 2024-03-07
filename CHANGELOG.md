@@ -1,3 +1,19 @@
+## 1.6.1
+
+### What's new:
+
+**Features:**
+
+- `--item` flag can also be short `-i`
+
+**Misc:**
+
+- all features enabled by default when building
+- refactoring cl args checks
+- args usage error messages
+
+<br>
+
 ## 1.6.0
 
 ### What's new:

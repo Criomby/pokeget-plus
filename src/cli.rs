@@ -7,12 +7,12 @@ pub struct Args {
     pub names: Vec<String>,
 
     #[cfg(feature = "items")]
-    /// Get item (e.g. 'ball/master')
-    #[arg(long, default_value_t = false)]
-    pub item: bool,
+    /// NAME is item (e.g. 'ball/master')
+    #[arg(short, long = "item", default_value_t = false)]
+    pub is_item: bool,
 
     #[cfg(feature = "gen7")]
-    /// Display gen7 sprite (instead of gen8)
+    /// Display retro gen7 sprite
     #[arg(long, default_value_t = false)]
     pub gen7: bool,
 

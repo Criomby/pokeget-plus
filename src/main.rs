@@ -6,8 +6,7 @@ use clap::Parser;
 use inflector::Inflector;
 use pokeget_plus::cli::Args;
 use pokeget_plus::sprites::{combine_sprites, get_sprites};
-use pokeget_plus::utils::get_form;
-use std::process::exit;
+use pokeget_plus::utils::{get_form, check_args};
 use std::collections::HashMap;
 use serde_json;
 
@@ -28,10 +27,7 @@ fn main() {
 
     let args = Args::parse();
 
-    if args.names.is_empty() {
-        eprintln!("Please specify the Pokémon or item to display");
-        exit(1);
-    }
+    check_args(&args);
 
     let form = get_form(&args);
 
@@ -50,7 +46,7 @@ fn main() {
             #[cfg(not(feature = "items"))]
             None,
             #[cfg(feature = "items")]
-            Some(args.item),
+            Some(args.is_item),
             &pokedex_list,
             &items_list,
             &items_index
