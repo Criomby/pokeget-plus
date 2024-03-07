@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::process::exit;
 use image::{DynamicImage, GenericImage};
 use crate::utils::random;
@@ -6,58 +7,126 @@ use crate::data::Data;
 /// Fetches a sprite and returns a vector of bytes.
 /// This will also format the names properly.
 pub fn get_sprite(
-    pokemon: &mut String,
-    list: &[&str],
+    name: &mut String,
     shiny: bool,
     female: bool,
     form: &str,
-    gen7: Option<bool>
+    gen7: Option<bool>,
+    item: Option<bool>,
+    pokedex_list: &[&str],
+    items_list: &[&str],
+    items_index: &HashMap<String, String>
 ) -> Vec<u8> {
-    if let Ok(pokedex_id) = pokemon.parse::<usize>() {
-        if pokedex_id == 0 {
-            *pokemon = String::from("random");
-        } else if list.len() >= pokedex_id {
-            *pokemon = String::from(list[pokedex_id - 1]);
+    // get corresponding Pokemon/item name if number entered
+    if let Ok(id) = name.parse::<usize>() {
+        if id == 0 {
+            *name = String::from("random");
+        } else {
+            if item.is_some_and(|is_item| is_item == true) {
+                *name = items_index.get(&id.to_string()).unwrap_or_else(|| {
+                    eprintln!("Item with ID '{}' not found", id);
+                    exit(1);
+                }).to_string();
+            } else {
+                if id <= pokedex_list.len() {
+                    *name = String::from(pokedex_list[id - 1]);
+                } else {
+                    eprintln!("Pokédex ID out of range");
+                    exit(1);
+                }
+            }
         }
     }
 
-    let is_random = pokemon == "random";
+    // filepath of sprite
+    let path: String;
 
-    if is_random {
-        *pokemon = random(list);
-    }
+    // fn flows for item/pokemon
+    if item.is_some_and(|is_item| is_item == true) {
+        // name is item
 
-    let mut filename = pokemon.to_owned();
+        if name == "random" {
+            *name = random(items_list);
+        } else if name.ends_with("random") {
+            let (category, _) = name
+                .split_once('/')
+                .unwrap_or_else(|| {
+                    eprintln!("Invalid item name.\nExpected structure: 'category/variation'\nExample: 'ball/master'");
+                    exit(1);
+                });
+            // get all item variations in category
+            let mut variations: Vec<&str> = vec![];
+            for item in items_list {
+                if item.starts_with(category) {
+                    let (_, variation) = item.split_once('/').unwrap();
+                    variations.push(variation);
+                } else {
+                    // since list of items is ordered alphabetically
+                    // stop searching when first non-category item comes up
+                    // if items in category have been found
+                    if !variations.is_empty() {
+                        break;
+                    }
+                }
+            }
+            if variations.is_empty() {
+                eprintln!("Item category '{}' not found", category);
+                exit(1);
+            }
+            *name = format!(
+                "{}/{}",
+                category,
+                random(&variations)
+            );
+        }
 
-    // The form shouldn't be applied to random pokemon.
-    if !form.is_empty() && !is_random {
-        filename.push('-');
-        filename.push_str(form);
-    }
+        path = format!("items/{}.png", name);
 
-    // I hate Mr. Mime and Farfetch'd.
-    filename = filename
-        .replace([' ', '_'], "-")
-        .replace(['.', '\'', ':'], "")
-        .to_lowercase();
+    } else {
+        // name is Pokemon
 
-    let gen_prefix = match gen7 {
-        Some(true) => "pokemon-gen7x/",
-        Some(false) => "pokemon-gen8/",
-        None => ""
-    };
+        let is_random = name == "random";
 
-    let path = &format!(
-        "{}{}/{}{}.png",
-        gen_prefix,
-        if shiny { "shiny" } else { "regular" },
-        if female && !is_random { "female/" } else { "" }, // Random pokemon also shouldn't follow the female rule.
-        filename.trim()
-    );
+        if is_random {
+            *name = random(pokedex_list);
+        }
+
+        let mut filename = name.to_owned();
+
+        // The form shouldn't be applied to random pokemon.
+        if !form.is_empty() && !is_random {
+            filename.push('-');
+            filename.push_str(form);
+        }
     
-    Data::get(path)
+        // I hate Mr. Mime and Farfetch'd.
+        filename = filename
+            .replace([' ', '_'], "-")
+            .replace(['.', '\'', ':'], "")
+            .to_lowercase();
+    
+        let prefix = match gen7 {
+            Some(true) => "pokemon-gen7x/",
+            Some(false) => "pokemon-gen8/",
+            None => "pokemon-gen8/"
+        };
+    
+        path = format!(
+            "{}{}/{}{}.png",
+            prefix,
+            if shiny { "shiny" } else { "regular" },
+            if female && !is_random { "female/" } else { "" }, // Random pokemon also shouldn't follow the female rule.
+            filename.trim()
+        );
+    }
+    
+    Data::get(&path)
         .unwrap_or_else(|| {
-            eprintln!("Pokémon '{}' not found", pokemon);
+            if item.is_some_and(|is_item| is_item == true) {
+                eprintln!("Item '{name}' not found.\nExample: 'ball/master'\nTry 'ball/random' for a random Pokéball");
+            } else {
+                eprintln!("Pokémon '{name}' not found");
+            }
             exit(1);
         })
         .data
@@ -88,19 +157,32 @@ pub fn combine_sprites(
 ///
 /// Mutable access to `pokemons` is required to edit the names of random pokemon so they can be displayed.
 pub fn get_sprites(
-    pokemons: &mut [String],
-    list: &[&str],
+    names: &mut [String],
     shiny: bool,
     female: bool,
     form: &str,
-    gen7: Option<bool>
+    gen7: Option<bool>,
+    item: Option<bool>,
+    pokedex_list: &[&str],
+    items_list: &[&str],
+    items_index: &HashMap<String, String>
 ) -> (u32, u32, Vec<DynamicImage>) {
     let mut sprites = Vec::new();
     let mut combined_width: u32 = 0;
     let mut combined_height: u32 = 0;
 
-    for pokemon in pokemons.iter_mut() {
-        let bytes = get_sprite(pokemon, list, shiny, female, form, gen7);
+    for name in names.iter_mut() {
+        let bytes = get_sprite(
+            name,
+            shiny,
+            female,
+            form,
+            gen7,
+            item,
+            pokedex_list,
+            items_list,
+            items_index,
+        );
 
         let img = image::load_from_memory(&bytes).unwrap();
         let trimmed = showie::trim(&img);
