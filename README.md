@@ -15,8 +15,6 @@ For example you can get a random Pokémon each time you open a new terminal sess
 
 ... and many more!
 
-An advanced version of the original [pokeget-rs](https://github.com/talwat/pokeget-rs).
-
 Key features:
 - Display Pokémon or items in your terminal with many options
 - Option to use the **retro gen7 sprites** with `--gen7`
@@ -24,6 +22,7 @@ Key features:
   e.g. get a random Pokéball each time you open a new terminal session
 - Prebuilt binaries for the most common targets
 - \+ various changes and fixes (see [changelog](CHANGELOG.md))
+- The sprites are embedded into the binary, so no additional files will have to be downloaded and `pokeget` runs fully offline
 
 <br>
 
@@ -122,7 +121,8 @@ If at any time the original author decides to want to include any added features
 
 ## Credits
 
+Pokeget-plus is built on the original [pokeget-rs](https://github.com/talwat/pokeget-rs).
+
 The sprites are from [pokesprite](https://github.com/msikma/pokesprite).
-They are embedded into the binary, so no additional files will have to be downloaded and `pokeget` runs fully offline.
 
 Also see the [other projects](OTHER_PROJECTS.md).
