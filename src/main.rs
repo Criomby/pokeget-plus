@@ -3,22 +3,17 @@
 #![warn(clippy::all, clippy::pedantic, clippy::nursery, clippy::restriction)]
 
 use clap::Parser;
-use inflector::Inflector;
 use pokeget_plus::cli::Args;
-use pokeget_plus::sprites::{combine_sprites, get_sprites};
-use pokeget_plus::utils::{get_form, check_args};
+use pokeget_plus::sprites::{
+    combine_sprites,
+    get_sprites
+};
+use pokeget_plus::utils::{
+    check_args,
+    format_name
+};
 use std::collections::HashMap;
 use serde_json;
-
-fn format_name(name: &String) -> String {
-    if name.contains('/') {
-        // format item names
-        let (cat, var) = name.split_once('/').unwrap();
-        format!("{} {}", var, cat).to_title_case()
-    } else {
-        name.to_title_case().replace('-', " ")
-    }
-}
 
 fn main() {
     let pokedex_list: Box<[&'static str]> = include_str!("../data/pokedex-list.txt").split('\n').collect();
@@ -29,16 +24,12 @@ fn main() {
 
     check_args(&args);
 
-    let form = get_form(&args);
-
-    let mut names = args.names;
+    let mut names = args.names.clone();
 
     let (width, height, sprites) =
         get_sprites(
             &mut names,
-            args.shiny,
-            args.female,
-            &form,
+            &args,
             #[cfg(not(feature = "gen7"))]
             None,
             #[cfg(feature = "gen7")]
