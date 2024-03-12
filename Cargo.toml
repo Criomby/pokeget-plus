@@ -1,9 +1,12 @@
 [package]
 name = "pokeget-plus"
-authors = [ "talwat", "Criomby" ]
-version = "1.6.0"
+authors = [ "talwat", "Criomby <criomby@protonmail.com>" ]
+version = "1.7.0"
 edition = "2021"
-description = "Display Pokémon, Pokéballs, berries, potions & more items in your terminal."
+description = """Display Pokémon, Pokéballs, berries, potions & more items in your terminal.
+
+List of all Pokémon & items:    https://msikma.github.io/pokesprite/overview/dex-gen8.html
+Full documentation:             https://github.com/Criomby/pokeget-plus"""
 license = "MIT"
 readme = "README.md"
 documentation = "https://github.com/Criomby/pokeget-plus"
@@ -15,13 +18,14 @@ name = "pokeget"
 path = "src/main.rs"
 
 [features]
-# gen8 sprites are always included by default
+# gen8 sprites are always included
+default = ["gen7", "items"] # all features enabled by default
 gen7 = [] # include gen7 sprites (--gen7)
-items = [] # include items like Pokéballs, berries, etc. (--item)
+items = [] # include items like Pokéballs, berries, etc. (-i, --item)
 
 [dependencies]
 Inflector = { version = "0.11.4", default-features = false }
-clap = { version = "4.3.19", features = ["derive"] }
+clap = { version = "4.5", features = ["derive"] }
 image = { version = "0.24.6", default-features = false, features = ["png","rgb",] }
 rand = "0.8.5"
 rust-embed = { version = "8.3.0", features = ["include-exclude"] }

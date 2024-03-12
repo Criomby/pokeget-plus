@@ -1,6 +1,5 @@
-name: Build
+name: Release Build
 on:
-  workflow_dispatch:
   release:
     types: [created]
 jobs:
@@ -40,6 +39,8 @@ jobs:
             name: pokeget-macOS-aarch64.tar.gz
             command: build
     runs-on: ${{ matrix.os }}
+    env:
+        GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -66,10 +67,16 @@ jobs:
           cd ./target/${{ matrix.target }}/release
           shasum -a 256 ${{ matrix.name }} > ${{ matrix.name }}.sha256
           cd -
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: pokeget-${{ matrix.target }}
-          path: |
-            ./target/${{ matrix.target }}/release/${{ matrix.name }}
-            ./target/${{ matrix.target }}/release/${{ matrix.name }}.sha256
+      #- name: Upload build artifact
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: pokeget-${{ matrix.target }}
+      #    path: |
+      #      ./target/${{ matrix.target }}/release/${{ matrix.name }}
+      #      ./target/${{ matrix.target }}/release/${{ matrix.name }}.sha256
+      - name: Upload release assets
+        shell: bash
+        run: |
+          gh release upload ${{github.event.release.tag_name}} \
+             ./target/${{ matrix.target }}/release/${{ matrix.name }} \
+             ./target/${{ matrix.target }}/release/${{ matrix.name }}.sha256

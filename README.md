@@ -1,6 +1,7 @@
 # pokeget-plus
 
-Display Pokémon, Pokéballs, berries, potions & more items in your terminal.
+Display Pokémon, Pokéballs, berries, potions & more items in your terminal.<br>
+For example you can get a random Pokémon each time you open a new terminal session.
 
 ![Pikachu](https://github.com/msikma/pokesprite/blob/c5aaa610ff2acdf7fd8e2dccd181bca8be9fcb3e/icons/pokemon/regular/pikachu.png)
 ![Sableye](https://github.com/msikma/pokesprite/blob/c5aaa610ff2acdf7fd8e2dccd181bca8be9fcb3e/icons/pokemon/regular/sableye.png)
@@ -14,15 +15,14 @@ Display Pokémon, Pokéballs, berries, potions & more items in your terminal.
 
 ... and many more!
 
-An advanced version of the original [pokeget-rs](https://github.com/talwat/pokeget-rs).
-
 Key features:
-- Display random Pokémon in your terminal with many options
+- Display Pokémon or items in your terminal with many options
 - Option to use the **retro gen7 sprites** with `--gen7`
 - Get **Pokémon items** with `--item [NAME]`
   e.g. get a random Pokéball each time you open a new terminal session
 - Prebuilt binaries for the most common targets
-- \+ various fixes and changes (see [changelog](CHANGELOG.md))
+- \+ various changes and fixes (see [changelog](CHANGELOG.md))
+- The sprites are embedded into the binary, so no additional files will have to be downloaded and `pokeget` runs fully offline
 
 <br>
 
@@ -37,7 +37,7 @@ You have two options:
 Install via cargo:
 
 ```sh
-cargo install --git https://github.com/Criomby/pokeget-plus --locked --all-features
+cargo install --git https://github.com/Criomby/pokeget-plus.git --locked
 ```
 and making sure `$HOME/.cargo/bin` is added to `$PATH`.
 
@@ -46,21 +46,22 @@ and making sure `$HOME/.cargo/bin` is added to `$PATH`.
 clone the repository and compile manually:
 
 ```sh
-git clone --recurse-submodules https://github.com/Criomby/pokeget-plus
-cd pokeget-rs
-cargo build --release --locked --all-features
+git clone --recurse-submodules https://github.com/Criomby/pokeget-plus.git
+cd pokeget-plus
+cargo build --release --locked
 ```
+
+<br>
 
 **Update** with either re-running `cargo install ...` as above or<br>
 `git pull` on the repository and then recompile.
 
----
+<br>
+
 Tip:
 
-> If you don't need the retro gen7 sprites or items, just remove the `--all-features` flag and you'll get a smaller file size since those assets won't be embedded into the binary.<br>
+> If you don't need the retro gen7 sprites or items, just add the `--no-default-features` flag and you'll get a smaller file size since those assets won't be embedded into the binary then.<br>
 This will save you 1.6 MB (8.7 MB vs. 10.3 MB).
-
----
 
 <br>
 
@@ -71,16 +72,20 @@ This will save you 1.6 MB (8.7 MB vs. 10.3 MB).
 `pokeget [NAME]`
 
 e.g. `pokeget pikachu`<br>
-Use `pokeget random` for a random Pokémon
+Use `pokeget random` for a random Pokémon.
 
 ### **Item:** 
 
 `pokeget --item [category/variation]`
 
-e.g. `pokeget --item ball/super` or `pokeget --item berry/pecha`<br>
-Use `pokeget --item random` for a random item or to get a random item from a sub-category with `pokeget --item ball/random` for a random Pokéball or `berry/random` for a random berry, etc.
+e.g. `pokeget --item ball/fast` or `pokeget --item berry/pecha`
 
-List of all available items and categories: [items-list](data/items-list.txt)
+Use `pokeget --item random` for a random item or<br>
+get a random item from a *category* with `pokeget --item ball/random` for a random Pokéball or `... berry/random` for a random berry, etc.
+
+With the short item flag: `pokeget -i ball/random`, `pokeget -i berry/golden-razz`
+
+-> List of all available items and categories: [items-list](data/items-list.txt) <-
 
 <br>
 
@@ -90,16 +95,18 @@ List of all available items and categories: [items-list](data/items-list.txt)
 
 You can also use multiple Pokémon / items like:
 
-`pokeget bulbasaur pikachu` or `pokeget --item ball/super ball/random`
+`pokeget bulbasaur pikachu` or `pokeget --item ball/ultra ball/random`
 
 and Pokédex / item ID's work too, e.g.:
 
 `pokeget 25` (Pikachu)
 
-`pokeget --item 4` (regular Pokéball)
+`pokeget --item 4` or `pokeget -i 4` (regular Pokéball)
 
 > ID '0' is equal to 'random'.<br>
-So you can also use `pokeget 0` or `pokeget --item 0` to get random results.
+So you can also use `pokeget 0` and `pokeget --i 0` to get random results.
+
+
 
 <br>
 
@@ -114,7 +121,8 @@ If at any time the original author decides to want to include any added features
 
 ## Credits
 
+Pokeget-plus is built on the original [pokeget-rs](https://github.com/talwat/pokeget-rs).
+
 The sprites are from [pokesprite](https://github.com/msikma/pokesprite).
-They are embedded into the binary, so no additional files will have to be downloaded and `pokeget` runs fully offline.
 
 Also see the [other projects](OTHER_PROJECTS.md).
