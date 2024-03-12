@@ -1,7 +1,11 @@
 use std::collections::HashMap;
 use std::process::exit;
 use image::{DynamicImage, GenericImage};
-use crate::utils::random;
+use crate::cli::Args;
+use crate::utils::{
+    random,
+    print_err
+};
 use crate::data::Data;
 
 /// Fetches a sprite and returns a vector of bytes.
@@ -17,6 +21,7 @@ pub fn get_sprite(
     items_list: &[&str],
     items_index: &HashMap<String, String>
 ) -> Vec<u8> {
+    
     // get corresponding Pokemon/item name if number entered
     if let Ok(id) = name.parse::<usize>() {
         if id == 0 {
@@ -24,14 +29,14 @@ pub fn get_sprite(
         } else {
             if is_item.is_some_and(|is_item| is_item == true) {
                 *name = items_index.get(&id.to_string()).unwrap_or_else(|| {
-                    eprintln!("Item with ID '{}' not found", id);
+                    print_err(&format!("Item with ID '{}' not found", id));
                     exit(1);
                 }).to_string();
             } else {
                 if id <= pokedex_list.len() {
                     *name = String::from(pokedex_list[id - 1]);
                 } else {
-                    eprintln!("Pokédex ID out of range");
+                    print_err("Pokédex ID out of range");
                     exit(1);
                 }
             }
@@ -51,7 +56,7 @@ pub fn get_sprite(
             let (category, _) = name
                 .split_once('/')
                 .unwrap_or_else(|| {
-                    eprintln!("Invalid item name.\nExpected structure: 'category/variation'\nExample: 'ball/master'");
+                    print_err("Invalid item name.");
                     exit(1);
                 });
             // get all item variations in category
@@ -70,7 +75,7 @@ pub fn get_sprite(
                 }
             }
             if variations.is_empty() {
-                eprintln!("Item category '{}' not found", category);
+                print_err(&format!("Item category '{}' not found", category));
                 exit(1);
             }
             *name = format!(
@@ -93,10 +98,10 @@ pub fn get_sprite(
 
         let mut filename = name.to_owned();
 
-        // The form shouldn't be applied to random pokemon.
-        if !form.is_empty() && !is_random {
+        // The form shouldn't be applied to random pokemon
+        if !(form == "regular") && !is_random {
             filename.push('-');
-            filename.push_str(form);
+            filename.push_str(&form);
         }
     
         // I hate Mr. Mime and Farfetch'd.
@@ -105,7 +110,7 @@ pub fn get_sprite(
             .replace(['.', '\'', ':'], "")
             .to_lowercase();
     
-        let prefix = match gen7 {
+        let gen_prefix = match gen7 {
             Some(true) => "pokemon-gen7x/",
             Some(false) => "pokemon-gen8/",
             None => "pokemon-gen8/"
@@ -113,7 +118,7 @@ pub fn get_sprite(
     
         path = format!(
             "{}{}/{}{}.png",
-            prefix,
+            gen_prefix,
             if shiny { "shiny" } else { "regular" },
             if female && !is_random { "female/" } else { "" }, // Random pokemon also shouldn't follow the female rule.
             filename.trim()
@@ -123,9 +128,9 @@ pub fn get_sprite(
     Data::get(&path)
         .unwrap_or_else(|| {
             if is_item.is_some_and(|is_item| is_item == true) {
-                eprintln!("Item '{name}' not found.\nExample: 'ball/master'\nTry 'ball/random' for a random Pokéball");
+                print_err(&format!("Item '{}' not found", name));
             } else {
-                eprintln!("Pokémon '{name}' not found");
+                print_err(&format!("Pokémon '{}' not found", name));
             }
             exit(1);
         })
@@ -154,13 +159,9 @@ pub fn combine_sprites(
 
 /// Loops through all the pokemon specified in the args and returns a vector of images.
 /// This will also format the names properly.
-///
-/// Mutable access to `pokemons` is required to edit the names of random pokemon so they can be displayed.
 pub fn get_sprites(
     names: &mut [String],
-    shiny: bool,
-    female: bool,
-    form: &str,
+    args: &Args,
     gen7: Option<bool>,
     is_item: Option<bool>,
     pokedex_list: &[&str],
@@ -171,12 +172,13 @@ pub fn get_sprites(
     let mut combined_width: u32 = 0;
     let mut combined_height: u32 = 0;
 
+    // Mutable access to `pokemons` is required to edit the names of random pokemon so they can be displayed.
     for name in names.iter_mut() {
         let bytes = get_sprite(
             name,
-            shiny,
-            female,
-            form,
+            args.shiny,
+            args.female,
+            &args.form,
             gen7,
             is_item,
             pokedex_list,
@@ -184,8 +186,9 @@ pub fn get_sprites(
             items_index,
         );
 
-        let img = image::load_from_memory(&bytes).unwrap();
-        let trimmed = showie::trim(&img);
+        let trimmed = showie::trim(
+            &image::load_from_memory(&bytes).unwrap()
+        );
 
         combined_width += trimmed.width() + 1;
 

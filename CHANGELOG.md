@@ -1,16 +1,18 @@
-## 1.6.1
+## 1.7.0
 
 ### What's new:
 
 **Features:**
 
-- `--item` flag can also be short `-i`
+- simplified cl interface
+    - specific form flags removed to only allow form flag with argument: '--form <FORM>'
+    - `--item` flag can also be short `-i`
 
 **Misc:**
-
-- all features enabled by default when building
-- refactoring cl args checks
-- args usage error messages
+- all features enabled by default (default features)
+- better help & error messages
+- refactoring cl args & functions
+- updated clap crate to v4.5
 
 <br>
 
@@ -20,7 +22,7 @@
 
 **Features:**
 
-- Get Pokémon items with `--item [NAME]`
+- get Pokémon items with `--item [NAME]`
     - can be conditionally compiled with `--features items`
     - increases binary size by ~600 KB
     - see documentation for more usage info and availabe items

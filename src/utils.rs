@@ -1,7 +1,6 @@
 use std::process::exit;
-
 use rand::Rng;
-
+use inflector::Inflector;
 use crate::cli::Args;
 
 /// Returns a random pokemon.
@@ -10,74 +9,52 @@ pub fn random(list: &[&str]) -> String {
     String::from(list[rand.gen_range(0..list.len())])
 }
 
-/// Uses the arguments like gmax, mega, etc... to get a form which is appended to the pokemon filename.
-pub fn get_form(args: &Args) -> String {
-    let mut form;
-
-    if args.mega {
-        form = String::from("mega");
-    } else if args.mega_x {
-        form = String::from("mega-x");
-    } else if args.mega_y {
-        form = String::from("mega-y");
-    } else if args.alolan {
-        form = String::from("alola");
-    } else if args.gmax {
-        form = String::from("gmax");
-    } else if args.hisui {
-        form = String::from("hisui");
-    } else if args.galar {
-        form = String::from("galar");
-    } else {
-        form = args.form.clone();
-    }
-
-    if args.noble {
-        form.push_str("-noble");
-    }
-
-    form
-}
-
-/// check cl args compliance
+/// Check cl args compliance
 pub fn check_args(args: &Args) {
     if args.names.is_empty() {
-        eprintln!("Please specify the Pokémon or item to display.\n'pokeget --help' for more info.");
+        print_err("Please specify the Pokémon or item to display");
         exit(1);
     }
+
     #[cfg(feature = "items")]
     {
+        // check options
+        let mut options: Vec<String> = Vec::new();
+
+        if !(args.form == "regular") {
+            options.push("--form <FORM>".to_string());
+        }    
+        if args.female {
+            options.push("--female".to_string());
+        }
+        if args.shiny {
+            options.push("--shiny ".to_string());
+        }
+        #[cfg(feature = "gen7")]
+        if args.gen7 {
+            options.push("--gen7".to_string());
+        }
+
         if args.is_item {
-            let mut options = String::new();
-
-            if !args.form.is_empty() {
-                options.push_str("--form <FORM> ");
-            } else if args.mega {
-                options.push_str("--mega ");
-            } else if args.mega_x {
-                options.push_str("--mega-x ");
-            } else if args.mega_y {
-                options.push_str("--mega-y ");
-            } else if args.shiny {
-                options.push_str("--shiny ");
-            } else if args.alolan {
-                options.push_str("--alolan ");
-            } else if args.gmax {
-                options.push_str("--gmax ");
-            } else if args.hisui {
-                options.push_str("--hisui");
-            } else if args.noble {
-                options.push_str("--noble");
-            } else if args.galar {
-                options.push_str("--galar");
-            } else if args.female {
-                options.push_str("--female");
-            }
-
-            if !options.is_empty() {
-                eprintln!("Items do not have any options.\nRemove: {}", options);
+            if options.len() > 0 {
+                print_err(&format!("Items do not have any options.\nRemove: {:?}", options));
                 exit(1);
             }
         }
     }
+}
+
+pub fn format_name(name: &String) -> String {
+    if name.contains('/') {
+        // format item names
+        let (cat, var) = name.split_once('/').unwrap();
+        format!("{} {}", var, cat).to_title_case()
+    } else {
+        name.to_title_case().replace('-', " ")
+    }
+}
+
+// prints a formatted error message
+pub fn print_err(text: &str) {
+    eprintln!("\x1b[31m{text}\x1b[0m\n'pokeget --help' for more info.")
 }
